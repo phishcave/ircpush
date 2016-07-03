@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var testNotification = Notification{
+var testNotification = CaveNotification{
 	Name:   "name",
 	Id:     "id",
 	Author: "author",
@@ -46,7 +46,7 @@ func TestHandle(t *T) {
 		t.Error("Expected to get a notification, got nil.")
 	}
 
-	if notification, ok := note.(Notification); !ok {
+	if notification, ok := note.(CaveNotification); !ok {
 		t.Error("Expected to get a Notification type.")
 	} else if notification != testNotification {
 		t.Error("Expected an unaltered payload.")

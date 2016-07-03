@@ -9,15 +9,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Name is the name of the service, for use with When() in cinotify.
-const Name = "cave"
-
 func init() {
-	cinotify.Register(Name, caveHandler{})
+	cinotify.Register("cave", caveHandler{})
 }
 
-// Notification is the notification transmitted from a cavenotify request.
-type Notification struct {
+// CaveNotification is the notification transmitted from a cavenotify request.
+type CaveNotification struct {
 	Name   string `json:"name"`
 	Id     string `json:"id"`
 	Author string `json:"uploader"`
@@ -25,7 +22,7 @@ type Notification struct {
 }
 
 // phishcave.com/u/123123 : [mobile] phishpic_31231.png by Chetic
-func (n Notification) String() string {
+func (n CaveNotification) String() string {
 	return fmt.Sprintf(
 		"http://phishcave.com/u/%v : [%v] %v by %v",
 		n.Id,
@@ -44,7 +41,7 @@ func (_ caveHandler) Handle(r *http.Request) fmt.Stringer {
 	defer r.Body.Close()
 	decoder := json.NewDecoder(r.Body)
 
-	var n Notification
+	var n CaveNotification
 	err := decoder.Decode(&n)
 	if err != nil {
 		cinotify.DoLog("cinotify/cave: Failed to decode json payload: ", err)
